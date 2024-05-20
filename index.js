@@ -13,7 +13,7 @@ app.get("/api/hello", function (req, res) {
   res.json({ greeting: 'hello API' });
 });
 
-app.get("/api/:date?", (req, res) => {
+app.get('/api/:date?', (req, res) => {
   let dateString = req.params.date;
   let date;
 
@@ -26,17 +26,29 @@ app.get("/api/:date?", (req, res) => {
   }
 
   if (date.toString() === 'Invalid Date') {
-    return res.json({ error: "Invalid Date" });
+    res.json({ error: "Invalid Date" });
   } else {
-    return res.json({
+    res.json({
       unix: date.getTime(),
       utc: date.toUTCString()
     });
   }
 });
 
+app.get('/api/whoami', (req, res) => {
+  const ipaddress = req.ip;
+  const language = req.headers['accept-language'];
+  const software = req.headers['user-agent'];
+
+  res.json({
+    ipaddress: ipaddress,
+    language: language,
+    software: software
+  });
+});
+
 var listener = app.listen(process.env.PORT || 3000, function () {
-    console.log('Your app is listening on port ' + listener.address().port);
+  console.log('Your app is listening on port ' + listener.address().port);
 });
 
 module.exports = app;
